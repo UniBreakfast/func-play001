@@ -19,6 +19,10 @@ var checks = [
 console.log(validate('aa5jdjf', checks))
 var checks2 = [
   {
+    not: /.+/,
+    err: "should not be empty"
+  },
+  {
     sub: 1,
     is: /\W/,
     err: "latin letters, numbers and _ only!"
@@ -30,4 +34,22 @@ var checks2 = [
   },
   email
 ]
-console.log(validate(['aa5jdjf', 'from@mail.com'], checks2))
+console.log(validate(['aa5 jdjf', 'from@mail.com'], checks2))
+var checks3 = [
+  {
+    not: /.+/,
+    err: "should not be empty"
+  },
+  {
+    sub: 1,
+    is: /\W/,
+    err: "latin letters, numbers and _ only!"
+  },
+  {
+    sub: 1,
+    not: /^.{3,8}$/,
+    err: "should be 3 to 8 characters long!"
+  },
+  email
+]
+console.log(validate(['aa5jdjf', ''], checks3))
