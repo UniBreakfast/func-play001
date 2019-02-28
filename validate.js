@@ -16,6 +16,18 @@ function validate(subj, checks) {
       }
     }
   }
+  else if (typeof subj=='object') {
+    if (checks.sub) {
+      let err = validate(subj[checks.sub],checks)
+      if (err) return [checks.sub, err]
+    }
+    else {
+      for (let sub in subj) {
+        if (err=validate(subj[sub],checks))
+          return [sub, err]
+      }
+    }
+  }
   else {
     const {is, not, err} = checks
     if (is && is.test(subj) || not && !not.test(subj))
