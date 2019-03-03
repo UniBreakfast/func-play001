@@ -9,7 +9,14 @@ function signup(login, mail, pass) {
     { sub: 'pass', not: /./,
       err: 'empty password is not allowed' }
   ]
-  var invalid = validate({login, mail, pass}, checks)
+  var invalid
+  if (!login&&!mail) invalid = 'login and mail could not be both empty'
+  else if (!login&&mail)
+    invalid = validate({mail, pass}, checks.filter(check=>check.sub!='login'))
+  else if (login&&!mail)
+    invalid = validate({login, pass}, checks.filter(check=>check.sub!='mail'))
+  else invalid = validate({login, mail, pass}, checks)
+
   if (invalid) tellWhat(invalid)
   else signupReq(login, mail, pass)
 }
@@ -28,7 +35,7 @@ function signupRespHandl(response) {
   }
   catch {
     response = response.trim()
-    if (response.startsWith('<') && response.endsWith('>'))
+    if (response.startsWith('<'))
       document.body.innerHTML = response
     else alert('Unexpected server response: '+response)
   }

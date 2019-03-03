@@ -12,7 +12,16 @@ $checks = array(
   array('sub'=>'pass', 'not'=>'/./',
         'err'=>'empty password is not allowed')
 );
-if ($invalid=validate($subj, $checks))
+if (!$login&&!$mail) $invalid = 'login and mail could not be both empty';
+elseif (!$login&&$mail)
+ $invalid = validate(array_filter($subj, function($k){return $k!='login';}, 2),
+ array_values(array_filter($checks, function($v){return $v['sub']!='login';})));
+elseif ($login&&!$mail)
+  $invalid = validate(array_filter($subj, function($k){return $k!='mail';}, 2),
+  array_values(array_filter($checks, function($v){return $v['sub']!='mail';})));
+else $invalid = validate($subj, $checks);
+
+if ($invalid)
   $response['invalid'] = $invalid;
 else $response['ok'] =
   "going to process login: $login, mail: $mail, pass: $pass";
