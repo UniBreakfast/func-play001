@@ -4,17 +4,17 @@ function request() {
   foreach (func_get_args() as $arg) $values[] = $_REQUEST[$arg];
   return $values;
 }
-list($login, $pass) = request('login','pass');
+
+require "validate.php";
+sleep(1);
 
 switch ($_REQUEST['task']) {
   case 'signup': {
-    list ($login, $mail, $pass) = request('login', 'mail', 'pass');
-  }
+    require 'signup.php';
+  } break;
 }
 
+if (isset($response)) echo json_encode($response);
 
-    sleep(1);
-
-echo 'response received';
 
 ?>
