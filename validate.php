@@ -41,4 +41,22 @@ function validate($subj, $checks) {
 };
 
 $emailRegExp = '/^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/';
+
+
+function check_is($err, $regexp, $sub=null) {
+  return array('err'=>$err, 'is'=>$regexp, 'sub'=>$sub);
+}
+function check_not($err, $regexp, $sub=null) {
+  return array('err'=>$err, 'not'=>$regexp, 'sub'=>$sub);
+}
+
+function sub_less($subj, $sub) {
+  return array_filter($subj, function($k)use($sub){return $k!=$sub;}, 2);
+}
+function check_less($checks, $sub) {
+  return array_values(array_filter($checks,
+    function($v)use($sub){return $v['sub']!=$sub;}));
+}
+
+
 ?>

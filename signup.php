@@ -1,24 +1,22 @@
 <?php
-
 list ($login, $mail, $pass) = request('login', 'mail', 'pass');
 $subj = array('login'=>$login, 'mail'=>$mail, 'pass'=>$pass);
 $checks = array(
-  array('sub'=>'login', 'is'=>'/\W/',
-        'err'=>'should only have latin letters, numbers and underscores'),
-  array('sub'=>'login', 'not'=>'/^.{3,16}$/',
-        'err'=>'should be 3 to 16 characters long'),
-  array('sub'=>'mail', 'not'=>$emailRegExp,
-        'err'=>"that doesn't look like a valid e-mail"),
-  array('sub'=>'pass', 'not'=>'/./',
-        'err'=>'empty password is not allowed')
+  check_is('should only have latin letters, numbers and underscores',
+           '/\W/', 'login'),
+  check_not('should be 3 to 16 characters long',
+            '/^.{3,16}$/', 'login'),
+  check_not("that doesn't look like a valid e-mail",
+            $emailRegExp, 'mail'),
+  check_not('should be 3 to 16 characters long',
+            '/./', 'pass')
 );
+
 if (!$login&&!$mail) $invalid = 'login and mail could not be both empty';
 elseif (!$login&&$mail)
- $invalid = validate(array_filter($subj, function($k){return $k!='login';}, 2),
- array_values(array_filter($checks, function($v){return $v['sub']!='login';})));
+  $invalid = validate(sub_less($subj, 'login'), check_less($checks, 'login'));
 elseif ($login&&!$mail)
-  $invalid = validate(array_filter($subj, function($k){return $k!='mail';}, 2),
-  array_values(array_filter($checks, function($v){return $v['sub']!='mail';})));
+  $invalid = validate(sub_less($subj, 'mail'), check_less($checks, 'mail'));
 else $invalid = validate($subj, $checks);
 
 if ($invalid)
