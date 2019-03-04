@@ -12,7 +12,8 @@
   <input id=pass type=password placeholder=password>
   <button id=signupBtn>Sign Up</button>
   <script>
-    signupBtn.onclick =()=> signup(login.value, mail.value, pass.value)
+    signupBtn.onclick =()=> signup(login.value, mail.value, pass.value,
+                                   response=>console.log("YES! "+response))
   </script>
 </body>
 </html>

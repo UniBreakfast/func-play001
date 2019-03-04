@@ -1,4 +1,6 @@
-function signup(login, mail, pass) {
+function signup(login, mail, pass, respcb) {
+  respcb = respcb || console.log
+
   var checks = [
     { sub: 'login', is: /\W/,
       err: 'should only have latin letters, numbers and underscores' },
@@ -17,21 +19,23 @@ function signup(login, mail, pass) {
     invalid = validate({login, pass}, checks.filter(check=>check.sub!='mail'))
   else invalid = validate({login, mail, pass}, checks)
 
-  if (invalid) tellWhat(invalid)
-  else signupReq(login, mail, pass)
+  if (invalid) respcb(tellWhat(invalid))
+  else signupReq(login, mail, pass, respcb)
 }
 
-function signupReq(login, mail, pass) {
+function signupReq(login, mail, pass, respcb) {
   request('POST',
           `server.php?task=signup&login=${login}&mail=${mail}&pass=${pass}`,
-          signupRespHandl, console.log)
+          response=>signupRespHandl(response, respcb), console.log)
 }
 
-function signupRespHandl(response) {
+function signupRespHandl(response, respcb) {
+  respcb = respcb || console.log
+
   try {
     response = JSON.parse(response)
-    if (response.invalid) tellWhat(response.invalid)
-    else console.log(response)
+    if (response.invalid) respcb(tellWhat(response.invalid))
+    else respcb(response)
   }
   catch {
     response = response.trim()
@@ -42,6 +46,6 @@ function signupRespHandl(response) {
 }
 
 function tellWhat(invalid) {
-  if (typeof invalid == 'string') console.log(invalid)
-  else console.log('Error on input '+invalid[0]+': '+invalid[1])
+  if (typeof invalid == 'string') return invalid
+  else return 'Error on input '+invalid[0]+': '+invalid[1]
 }
