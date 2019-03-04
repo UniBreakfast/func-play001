@@ -1,5 +1,7 @@
 <?php
+
 list ($login, $mail, $pass) = request('login', 'mail', 'pass');
+
 $subj = array('login'=>$login, 'mail'=>$mail, 'pass'=>$pass);
 $checks = array(
   check_is('should only have latin letters, numbers and underscores',
@@ -9,8 +11,7 @@ $checks = array(
   check_not("that doesn't look like a valid e-mail",
             $emailRegExp, 'mail'),
   check_not('should be 3 to 16 characters long',
-            '/./', 'pass')
-);
+            '/./', 'pass')  );
 
 if (!$login&&!$mail) $invalid = 'login and mail could not be both empty';
 elseif (!$login&&$mail)
