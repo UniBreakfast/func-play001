@@ -7,13 +7,39 @@
   <script src=client.js></script>
 </head>
 <body>
-  <input id=login placeholder="login (optional)">
-  <input id=mail type=email placeholder="e-mail (optional)">
-  <input id=pass type=password placeholder=password>
-  <button id=signupBtn>Sign Up</button>
+  <style>
+    #signupForm {
+      display: inline-grid;
+      grid-template: "label1 login"
+                     "label2 mail"
+                     "label3 pass"
+                     "signup signup"
+    }
+    label, input::placeholder { text-align: right }
+    #login { grid-area: login }
+    #mail  { grid-area: mail }
+    #pass  { grid-area: pass }
+    #label1 { grid-area: label1 }
+    #label2 { grid-area: label2 }
+    #label3 { grid-area: label3 }
+    #signupBtn { grid-area: signup }
+  </style>
+  <form id=signupForm>
+    <input id=login placeholder="nickname          optional">
+    <input id=mail  placeholder="user@mail.com     optional" type=email>
+    <input id=pass  placeholder="PA55w0rd         required" type=password>
+    <label for=login id=label1>Login:</label>
+    <label for=mail  id=label2>E-mail:</label>
+    <label for=pass  id=label3>Password:</label>
+    <button id=signupBtn>Sign Up</button>
+  </form>
   <script>
-    signupBtn.onclick =()=> signup(login.value, mail.value, pass.value,
+    signupBtn.onclick =e=> {
+      e.preventDefault()
+      signup(login.value, mail.value, pass.value,
                                    response=>console.log("YES! "+response))
+                                  // TODO response handler should be passed here
+    }
   </script>
 </body>
 </html>
