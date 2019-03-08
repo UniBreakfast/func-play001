@@ -22,8 +22,17 @@ else $invalid = validate($subj, $checks);
 
 if ($invalid)
   $response['invalid'] = $invalid;
-else $response['ok'] =
-  "going to process login: $login, mail: $mail, pass: $pass";
+else {
+  require 'db.php';
+  $query = "INSERT funcplay001_users (login, email, passhash)
+            VALUES ('$login', '$mail', '$pass')";
+  mysqli_query($db, $query) or exit(mysqli_error($db));
+
+
+}
+
+// $response['ok'] =
+//   "going to process login: $login, mail: $mail, pass: $pass";
 
 
 

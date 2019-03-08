@@ -38,7 +38,7 @@ function signupRespHandl(response, respcb) {
     else respcb(response)
   }
   catch {
-    response = response.trim()
+    response = response && response.trim() || 'empty'
     if (response.startsWith('<'))
       document.body.innerHTML = response
     else alert('Unexpected server response: '+response)
